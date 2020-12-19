@@ -1,0 +1,24 @@
+{
+  "chains": [
+    {
+      "name": "freeTON",
+      "type": "ton",
+      "id": "2",
+      "endpoint": "http://doton-ton-chain",
+      "from": "0:164d61e6cad0597545cb8ab98ecfdb2a29e0cc55d484daece02c63d8511e9a5f",
+      "opts": {
+        "contractsPath": "/contracts",
+        "receiver": "0:5a1921e4c0ec016f6be00917e06adbf06af2a26acc860af7d989f9a754f2ae89"
+      }
+    }, {
+      "name": "sub",
+      "type": "substrate",
+      "id": "1",
+      "endpoint": "ws://doton-sub-chain:9944",
+      "from": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+      "opts": {
+        "useExtendedCall": "true"
+      }
+    }
+  ]
+}
