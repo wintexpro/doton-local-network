@@ -3,36 +3,22 @@
 
 version: '3'
 services:
-  bridge:
-    image: wintex/doton-bridge
-    container_name: doton-bridge
-    entrypoint: ./scripts/wait_chains.sh
-    command: ./bridge --config /configs/config.json
-    build:
-      context: .
-    depends_on:
-      - ton-chain
-      - sub-chain
-    environment:
-      - KEYSTORE_PASSWORD=123456
-    volumes:
-      - ./scripts:/scripts
-      - ./contracts:/contracts
-      - ./configs:/configs
-      - ./keys:/keys/
-
   ton-chain:
     image: tonlabs/local-node
     container_name: doton-ton-chain
     environment:
       - USER_AGREEMENT=yes
+    networks:
+      - default
     ports:
       - "80:80"
 
   sub-chain:
     image: wintex/doton-substrate-chain
     container_name: doton-sub-chain
-    command: doton-substrate-chain --dev --alice --ws-external --rpc-external --prometheus-external
+    command: doton-substrate-chain --dev --ws-external --rpc-external --prometheus-external
+    networks:
+      - default
     ports:
       - "9944:9944"
       - "9615:9615"
