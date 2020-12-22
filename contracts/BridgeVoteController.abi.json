@@ -1,0 +1,87 @@
+{
+	"ABI version": 2,
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_proposalStateInit","type":"cell"},
+				{"name":"_ballotInitState","type":"cell"},
+				{"name":"_deployInitialValue","type":"uint128"},
+				{"name":"_publicKey","type":"uint256"},
+				{"name":"_proposalVotersAmount","type":"uint256"},
+				{"name":"_bridgeAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "voteByBridge",
+			"inputs": [
+				{"name":"voter","type":"address"},
+				{"name":"choice","type":"uint8"},
+				{"name":"chainId","type":"uint8"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"handlerAddress","type":"address"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"data","type":"uint256"},
+				{"name":"proposalPublicKey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createProposal",
+			"inputs": [
+				{"name":"chainId","type":"uint8"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"data","type":"uint256"},
+				{"name":"initializerChoice","type":"uint8"},
+				{"name":"initializerAddress","type":"address"},
+				{"name":"proposalPublicKey","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"proposalAddress","type":"address"}
+			]
+		},
+		{
+			"name": "getDeployInitialValue",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "setDeployInitialValue",
+			"inputs": [
+				{"name":"_deployInitialValue","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "getBallotCode",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"ballotCode","type":"cell"}
+			]
+		},
+		{
+			"name": "getProposalAddress",
+			"inputs": [
+				{"name":"chainId","type":"uint8"},
+				{"name":"nonce","type":"uint64"}
+			],
+			"outputs": [
+				{"name":"proposal","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

@@ -10,6 +10,7 @@ module.exports = {
   polkadotjs: {
     types: {
       "Message": "Text",
+      "ExtAddress": "Text",
       "chainbridge::ChainId": "u8",
       "ChainId": "u8",
       "ResourceId": "[u8; 32]",

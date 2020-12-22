@@ -9,7 +9,7 @@ RUN cargo install \
     --tag $TONOS_CLI_VERSION
 
 RUN curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
-  apt-get install -y nodejs
+  apt-get install -y nodejs xxd
 
 RUN npm install -g halva-cli
 

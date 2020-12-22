@@ -1,0 +1,62 @@
+{
+	"ABI version": 2,
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_ballotInitState","type":"cell"},
+				{"name":"_publicKey","type":"uint256"},
+				{"name":"_votersAmount","type":"uint256"},
+				{"name":"_proposalData","type":"uint256"},
+				{"name":"_chainId","type":"uint8"},
+				{"name":"_nonce","type":"uint64"},
+				{"name":"_voteControllerAddress","type":"address"},
+				{"name":"initializerChoice","type":"uint8"},
+				{"name":"initializerAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getYesVotes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"yesVotes","type":"uint256"}
+			]
+		},
+		{
+			"name": "getNoVotes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"noVotes","type":"uint256"}
+			]
+		},
+		{
+			"name": "vote",
+			"inputs": [
+				{"name":"choice","type":"uint8"},
+				{"name":"ballotPublicKey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "voteByController",
+			"inputs": [
+				{"name":"voter","type":"address"},
+				{"name":"choice","type":"uint8"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"handlerAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}
