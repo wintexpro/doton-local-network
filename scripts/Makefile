@@ -73,6 +73,9 @@ ton-deploy-contracts:
 	$(call ton_deploy,Bridge,$(BRIDGE_PARAMS))
 	$(call ton_deploy,Handler,$(HANDLER_PARAMS))
 
+	tonos-cli call $(ACCESS_CONTROLLER_ADDRESS) grantSuperAdminRole '{"accessCardAddress": "$(RELAYER_ADDRESS)"}' --abi $(CONTRACTS_PATH)/AccessController.abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
+	tonos-cli call $(RELAYER_ADDRESS) bridgeSetHandler '{"messageType": "0x000000000000000000000053696d706c654d6573736167655265736f75726365", "handlerAddress":"$(HANDLER_ADDRESS)"}' --abi $(CONTRACTS_PATH)/Relayer.abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
+
 .PHONY: ton-block-producing
 ton-block-producing:
 	$(call ton_set_addresses)
@@ -89,7 +92,7 @@ sub-setup:
 .PHONY: ton-send-msg
 ton-send-msg:
 	$(call ton_set_addresses)
-	tonos-cli call $(SENDER_ADDRESS) sendData '{"destination": "'$(RECEIVER_ADDRESS)'", "bounce":true, "value": "20000000", "data":"0x$(shell echo $(MSG) | xxd -p)", "destinationChainId":"0x01"}' --abi /contracts/Sender.abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
+	tonos-cli call $(SENDER_ADDRESS) sendData '{"destination": "'$(RECEIVER_ADDRESS)'", "bounce":true, "value": "20000000", "data":"0x$(shell echo $(MSG) | xxd -p)", "destinationChainId":"0x01"}' --abi $(CONTRACTS_PATH)/Sender.abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
 
 #################
 # TON Functions #
