@@ -13,7 +13,9 @@
 				{"name":"_nonce","type":"uint64"},
 				{"name":"_voteControllerAddress","type":"address"},
 				{"name":"initializerChoice","type":"uint8"},
-				{"name":"initializerAddress","type":"address"}
+				{"name":"initializerAddress","type":"address"},
+				{"name":"handlerAddress","type":"address"},
+				{"name":"messageType","type":"uint256"}
 			],
 			"outputs": [
 			]
@@ -32,6 +34,15 @@
 			],
 			"outputs": [
 				{"name":"noVotes","type":"uint256"}
+			]
+		},
+		{
+			"name": "getProposalInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"},
+				{"name":"value1","type":"uint256"}
 			]
 		},
 		{

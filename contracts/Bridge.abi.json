@@ -13,6 +13,15 @@
 			]
 		},
 		{
+			"name": "getMessageTypeHandler",
+			"inputs": [
+				{"name":"messageType","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
 			"name": "adminSetHandler",
 			"inputs": [
 				{"name":"messageType","type":"uint256"},

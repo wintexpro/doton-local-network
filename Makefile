@@ -7,7 +7,7 @@ SCRIPTS_PATH=/scripts
 
 TON_URL=http://doton-ton-chain
 
-INI_VALUE="1T"
+INI_VALUE="5T"
 PROPOSAL_VOTERS_AMOUNT=1
 BLOCK_TIME=2
 

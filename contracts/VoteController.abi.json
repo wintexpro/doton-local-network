@@ -9,23 +9,7 @@
 				{"name":"_ballotInitState","type":"cell"},
 				{"name":"_deployInitialValue","type":"uint128"},
 				{"name":"_publicKey","type":"uint256"},
-				{"name":"_proposalVotersAmount","type":"uint256"},
-				{"name":"_bridgeAddress","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "voteByBridge",
-			"inputs": [
-				{"name":"voter","type":"address"},
-				{"name":"choice","type":"uint8"},
-				{"name":"chainId","type":"uint8"},
-				{"name":"messageType","type":"uint256"},
-				{"name":"handlerAddress","type":"address"},
-				{"name":"nonce","type":"uint64"},
-				{"name":"data","type":"uint256"},
-				{"name":"proposalPublicKey","type":"uint256"}
+				{"name":"_proposalVotersAmount","type":"uint256"}
 			],
 			"outputs": [
 			]
