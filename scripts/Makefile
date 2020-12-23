@@ -1,7 +1,8 @@
 SHELL := /bin/bash
 
-ADDRESS=0:164d61e6cad0597545cb8ab98ecfdb2a29e0cc55d484daece02c63d8511e9a5f
-GIVER_ADDRESS=0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94
+GIVER_ADDRESS=
+PUBLIC_KEY=
+KEY=
 
 KEYS_PATH=
 CONTRACTS_PATH=
@@ -14,6 +15,10 @@ TON_URL=
 
 INI_VALUE="1T"
 
+RELAYER_ADDRESS=
+RELAYER_PARAMS=
+
+SENDER_ADDRESS=
 RECEIVER_ADDRESS=
 
 ACCESS_CONTROLLER_ADDRESS=
@@ -42,7 +47,8 @@ ton-init:
 	tonos-cli config --url $(TON_URL)
 	$(call ton_set_addresses)
 
-	$(call ton_send_init_value,$(ADDRESS),$(INI_VALUE))
+	$(call ton_send_init_value,$(RELAYER_ADDRESS),$(INI_VALUE))
+	$(call ton_send_init_value,$(SENDER_ADDRESS),$(INI_VALUE))
 	$(call ton_send_init_value,$(RECEIVER_ADDRESS),$(INI_VALUE))
 	$(call ton_send_init_value,$(BRIDGE_VOTE_CONTROLLER_ADDRESS),$(INI_VALUE))
 	$(call ton_send_init_value,$(ACCESS_CONTROLLER_ADDRESS),$(INI_VALUE))
@@ -53,13 +59,15 @@ ton-init:
 ton-deploy-contracts:
 	$(call ton_set_addresses)
 
-	$(eval BRIDGE_VOTE_CONTROLLER_PARAMS := '{"_proposalStateInit":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Proposal.tvc)'","_ballotInitState":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Relayer.tvc)'","_deployInitialValue": 2000000000,"_publicKey":"0x'$(BRIDGE_VOTE_CONTROLLER_PUBLIC_KEY)'","_proposalVotersAmount":'$(PROPOSAL_VOTERS_AMOUNT)',"_bridgeAddress":"'$(BRIDGE_ADDRESS)'"}')
+	$(eval RELAYER_PARAMS := '{"_accessControllerAddress": "$(ACCESS_CONTROLLER_ADDRESS)", "_myPublicKey": "$(PUBLIC_KEY)", "_myInitState":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Relayer.tvc)'", "_bridgeAddress":"$(BRIDGE_ADDRESS)"}')
+	$(eval BRIDGE_VOTE_CONTROLLER_PARAMS := '{"_proposalStateInit":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Proposal.tvc)'","_ballotInitState":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Relayer.tvc)'","_deployInitialValue": 2000000000,"_publicKey":"'$(PUBLIC_KEY)'","_proposalVotersAmount":'$(PROPOSAL_VOTERS_AMOUNT)',"_bridgeAddress":"'$(BRIDGE_ADDRESS)'"}')
 	$(eval BRIDGE_PARAMS := '{"_relayerInitState":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Relayer.tvc)'","_accessControllerAddress":"'$(ACCESS_CONTROLLER_ADDRESS)'","_voteControllerAddress": "'$(BRIDGE_VOTE_CONTROLLER_ADDRESS)'"}')
 	$(eval ACCESS_CONTROLLER_PARAMS := '{"_accessCardInitState":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Relayer.tvc)'", "_initialValue": 1000000}')
 	$(eval HANDLER_PARAMS := '{"_proposalStateInit":"'$(shell base64 -w 0 $(CONTRACTS_PATH)/Proposal.tvc)'"}')
 
 	$(call ton_deploy,Sender,{})
 	$(call ton_deploy,Receiver,{})
+	$(call ton_deploy,Relayer,$(RELAYER_PARAMS))
 	$(call ton_deploy,AccessController,$(ACCESS_CONTROLLER_PARAMS))
 	$(call ton_deploy,BridgeVoteController,$(BRIDGE_VOTE_CONTROLLER_PARAMS))
 	$(call ton_deploy,Bridge,$(BRIDGE_PARAMS))
@@ -67,8 +75,9 @@ ton-deploy-contracts:
 
 .PHONY: ton-block-producing
 ton-block-producing:
+	$(call ton_set_addresses)
 	while [ 1 -gt 0 ] ; do \
-		tonos-cli callex sendGrams $(GIVER_ADDRESS) $(CONTRACTS_PATH)/Giver.abi.json -- --dest $(ADDRESS) --amount "0" \
+		tonos-cli callex sendGrams $(GIVER_ADDRESS) $(CONTRACTS_PATH)/Giver.abi.json -- --dest $(RELAYER_ADDRESS) --amount "0" \
 		sleep $(BLOCK_TIME); \
 	done
 
@@ -76,21 +85,26 @@ ton-block-producing:
 sub-setup:
 	halva-cli exec -f /scripts/setup.js -p /configs/halva.js
 
+# make -f /scripts/Makefile ton-send-msg MSG="Hello!" KEYS_PATH=/keys SCRIPTS_PATH=/scripts CONTRACTS_PATH=/contracts TON_URL=http://doton-ton-chain KEY=0:df22eba0b48020b70efa7a6e9d6360ed1dc20877250947470cc1289b14c9cc1e
 .PHONY: ton-send-msg
 ton-send-msg:
-	tonos-cli call $(ADDRESS) sendData '{"destination": "'$(RECEIVE_ADDRESS)'", "bounce":true, "value": "20000000", "data":"0x$(shell echo $(MSG) | xxd -p)", "destinationChainId":"0x01"}' --abi /contracts/Sender.abi.json --sign $(KEYS_PATH)/$(ADDRESS).tonos.key
+	$(call ton_set_addresses)
+	tonos-cli call $(SENDER_ADDRESS) sendData '{"destination": "'$(RECEIVER_ADDRESS)'", "bounce":true, "value": "20000000", "data":"0x$(shell echo $(MSG) | xxd -p)", "destinationChainId":"0x01"}' --abi /contracts/Sender.abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
 
 #################
 # TON Functions #
 #################
 
 define ton_set_addresses
-	$(call ton_genaddr,RECEIVER_ADDRESS,Receiver,$(ADDRESS))
-	$(call ton_genaddr,ACCESS_CONTROLLER_ADDRESS,AccessController,$(ADDRESS))
-	$(call ton_genaddr,BRIDGE_VOTE_CONTROLLER_ADDRESS,BridgeVoteController,$(ADDRESS))
-	$(call ton_genaddr,BRIDGE_ADDRESS,Bridge,$(ADDRESS))
-	$(call ton_genaddr,HANDLER_ADDRESS,Handler,$(ADDRESS))
+	$(call ton_genaddr,RELAYER_ADDRESS,Relayer,$(KEY))
+	$(call ton_genaddr,SENDER_ADDRESS,Sender,$(KEY))
+	$(call ton_genaddr,RECEIVER_ADDRESS,Receiver,$(KEY))
+	$(call ton_genaddr,ACCESS_CONTROLLER_ADDRESS,AccessController,$(KEY))
+	$(call ton_genaddr,BRIDGE_VOTE_CONTROLLER_ADDRESS,BridgeVoteController,$(KEY))
+	$(call ton_genaddr,BRIDGE_ADDRESS,Bridge,$(KEY))
+	$(call ton_genaddr,HANDLER_ADDRESS,Handler,$(KEY))
 
+	@echo "Relayer address:                  $(RELAYER_ADDRESS)"
 	@echo "Bridge Vote Controller address:   $(BRIDGE_VOTE_CONTROLLER_ADDRESS)"
 	@echo "Access Controller address:        $(ACCESS_CONTROLLER_ADDRESS)"
 	@echo "Bridge address:                   $(BRIDGE_ADDRESS)"
@@ -107,5 +121,5 @@ define ton_send_init_value
 endef
 
 define ton_deploy
-	tonos-cli deploy $(CONTRACTS_PATH)/$(1).tvc $(2) --abi $(CONTRACTS_PATH)/$(1).abi.json --sign $(KEYS_PATH)/$(ADDRESS).tonos.key
+	tonos-cli deploy $(CONTRACTS_PATH)/$(1).tvc $(2) --abi $(CONTRACTS_PATH)/$(1).abi.json --sign $(KEYS_PATH)/$(KEY).tonos.key
 endef
