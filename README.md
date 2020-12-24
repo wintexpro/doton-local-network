@@ -65,7 +65,9 @@ TONOS Startup Edition (SE) is a pre-configured Docker image with a local blockch
 
 You can interact with a FreeTON local node by visiting http://127.0.0.1/graphql
 
-### Configuration
+## Configuration
+
+This repository fully completed for working with the bridge, but if you need to change config files, you can do it without rebuild docker images. Directories `./scripts`, `./configs`, `./contracts`, `./keys` will be mounted to docker containers
 
 #### Keys:
 
