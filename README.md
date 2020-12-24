@@ -81,7 +81,7 @@ make sub-send-msg MSG="Hello ton\!"
 
 ## Configuration
 
-This repository fully completed for working with the bridge, but if you need to change config files, you can do it without rebuild docker images. Directories `./scripts`, `./configs`, `./contracts`, `./keys` will be mounted to docker containers
+This repository is fully complete to working with the bridge, but if you need to change any config files, you can do so without rebuilding docker images. Directories `./scripts`, `./configs`, `./contracts`, `./keys` will be mounted to docker containers
 
 #### Keys:
 
