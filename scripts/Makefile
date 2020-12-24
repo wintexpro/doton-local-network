@@ -88,7 +88,6 @@ ton-block-producing:
 sub-setup:
 	halva-cli exec -f /scripts/setup.js -p /configs/halva.js
 
-# make -f /scripts/Makefile ton-send-msg MSG="Hello!" KEYS_PATH=/keys SCRIPTS_PATH=/scripts CONTRACTS_PATH=/contracts TON_URL=http://doton-ton-chain KEY=0:df22eba0b48020b70efa7a6e9d6360ed1dc20877250947470cc1289b14c9cc1e
 .PHONY: ton-send-msg
 ton-send-msg:
 	$(call ton_set_addresses)

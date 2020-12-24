@@ -40,9 +40,6 @@ build-setup:
 
 .PHONY: run-setup
 run-setup:
-ifeq ($(strip $(SETUP_IMAGE)),)
-	$(MAKE) build-setup
-endif
 	docker exec -it $(shell docker run -d \
 		--name doton-setup \
 		--network doton-local-network_default \
