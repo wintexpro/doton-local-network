@@ -67,13 +67,13 @@ You can interact with a FreeTON local node by visiting http://127.0.0.1/graphql
 
 ## Helpers
 
-For sending a message to Substrate through TON, you must follow a helper command:
+To send a message to Substrate through TON, you must follow a helper command:
 
 ```sh 
 make ton-send-msg MSG="Hello substrate\!"
 ```
 
-And for sending a message to TON through Substrate:
+And to send a message to TON through Substrate:
 
 ```sh 
 make sub-send-msg MSG="Hello ton\!"
