@@ -1,6 +1,7 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-SETUP_IMAGE=$(shell docker images -q wintex/doton-setup)
+SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
 
+CONFIGS_PATH=/configs
 KEYS_PATH=/keys
 CONTRACTS_PATH=/contracts
 SCRIPTS_PATH=/scripts
@@ -14,6 +15,20 @@ BLOCK_TIME=2
 GIVER_ADDRESS=0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94
 PUBLIC_KEY=0xebc77aae202a4f12237e10892f4fe0e44f8fb3dfc07008dcc12b37f8f70c1149
 KEY=0:df22eba0b48020b70efa7a6e9d6360ed1dc20877250947470cc1289b14c9cc1e
+
+define ENV
+	CONFIGS_PATH=$(CONFIGS_PATH)
+	KEYS_PATH=$(KEYS_PATH)
+	CONTRACTS_PATH=$(CONTRACTS_PATH)
+	SCRIPTS_PATH=$(SCRIPTS_PATH)
+	TON_URL=$(TON_URL)
+	INI_VALUE=$(INI_VALUE)
+	PROPOSAL_VOTERS_AMOUNT=$(PROPOSAL_VOTERS_AMOUNT)
+	BLOCK_TIME=$(PROPOSAL_VOTERS_AMOUNT)
+	GIVER_ADDRESS=$(GIVER_ADDRESS)
+	PUBLIC_KEY=$(PUBLIC_KEY)
+	KEY=$(KEY)
+endef
 
 .PHONY: run-chains
 run-chains:
@@ -38,6 +53,16 @@ run-bridge:
 build-setup:
 	docker build . -t wintex/doton-setup
 
+.PHONY: ton-send-msg
+ton-send-msg:
+	@echo $(shell docker exec -it $(SETUP_CONTAINER) \
+		make -f $(SCRIPTS_PATH)/Makefile ton-send-msg MSG="$(MSG)" $(ENV) | \
+		grep -o "MessageId: \([0-9a-zA-Z:]*\)")
+
+.PHONY: sub-send-msg
+sub-send-msg:
+	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
+
 .PHONY: run-setup
 run-setup:
 	docker exec -it $(shell docker run -d \
@@ -51,15 +76,5 @@ run-setup:
 		-v $(ROOT_DIR)/configs:/configs \
 		-v $(ROOT_DIR)/keys:/keys \
 		wintex/doton-setup \
-		--file /scripts/Makefile init \
-			KEYS_PATH=$(KEYS_PATH) \
-			CONTRACTS_PATH=$(CONTRACTS_PATH) \
-			SCRIPTS_PATH=$(SCRIPTS_PATH) \
-			TON_URL=$(TON_URL) \
-			INI_VALUE=$(INI_VALUE) \
-			PROPOSAL_VOTERS_AMOUNT=$(PROPOSAL_VOTERS_AMOUNT) \
-			BLOCK_TIME=$(PROPOSAL_VOTERS_AMOUNT) \
-			GIVER_ADDRESS=$(GIVER_ADDRESS) \
-			PUBLIC_KEY=$(PUBLIC_KEY) \
-			KEY=$(KEY) \
+		--file /scripts/Makefile init $(ENV) \
 	) /bin/bash;

@@ -4,6 +4,7 @@ GIVER_ADDRESS=
 PUBLIC_KEY=
 KEY=
 
+CONFIGS_PATH=
 KEYS_PATH=
 CONTRACTS_PATH=
 SCRIPTS_PATH=
@@ -86,7 +87,7 @@ ton-block-producing:
 
 .PHONY: sub-setup
 sub-setup:
-	halva-cli exec -f /scripts/setup.js -p /configs/halva.js
+	halva-cli exec -f $(SCRIPTS_PATH)/setup.js -p $(CONFIGS_PATH)/halva.js
 
 .PHONY: ton-send-msg
 ton-send-msg:
