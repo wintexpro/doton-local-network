@@ -28,7 +28,7 @@ $ make run-setup
 
 That execute to send initial value to contracts and deploy them to local TON node, also set up a substrate node for interacting with DOTON protocol. After setup, this command attaches you to a docker container with [tonos-cli](https://github.com/tonlabs/tonos-cli) and [halva-cli](https://github.com/halva-suite/halva) tools.
 
-At last, you can run the relay node by running the command (please, make sure the setup scripts was done):
+At last, you can run the relay node by running the command (please, make sure the setup scripts were done):
 
 ```sh
 $ make run-bridge
@@ -64,6 +64,20 @@ You will need to add these definitions to the [developer settings](https://polka
 TONOS Startup Edition (SE) is a pre-configured Docker image with a local blockchain that provides the same API as a Dapp Server.
 
 You can interact with a FreeTON local node by visiting http://127.0.0.1/graphql
+
+## Helpers
+
+For sending a message to Substrate through TON, you must follow a helper command:
+
+```sh 
+make ton-send-msg MSG="Hello substrate\!"
+```
+
+And for sending a message to TON through Substrate:
+
+```sh 
+make sub-send-msg MSG="Hello ton\!"
+```
 
 ## Configuration
 
