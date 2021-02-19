@@ -1,6 +1,6 @@
 FROM rust
 
-ARG TONOS_CLI_VERSION=v0.1.29
+ARG TONOS_CLI_VERSION=v0.6.0
 
 WORKDIR /opt/tonos-cli
 

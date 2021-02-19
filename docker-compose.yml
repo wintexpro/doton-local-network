@@ -4,7 +4,7 @@
 version: '3'
 services:
   ton-chain:
-    image: tonlabs/local-node
+    image: tonlabs/local-node:0.24.11
     container_name: doton-ton-chain
     environment:
       - USER_AGREEMENT=yes

@@ -1,0 +1,54 @@
+{
+	"ABI version": 2,
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_proposalCode","type":"cell"},
+				{"name":"_bridgeVoteControllerAddress","type":"address"},
+				{"name":"_bridgeVoteControllerPubKey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "executeProposal",
+			"inputs": [
+				{"name":"proposalPubKey","type":"uint256"},
+				{"name":"chainId","type":"uint8"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"data","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "receiveMessage",
+			"inputs": [
+				{"name":"chainId","type":"uint8"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"data","type":"uint256"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+		{
+			"name": "ProposalExecuted",
+			"inputs": [
+				{"name":"chainId","type":"uint8"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"data","type":"uint256"}
+			],
+			"outputs": [
+			]
+		}
+	]
+}

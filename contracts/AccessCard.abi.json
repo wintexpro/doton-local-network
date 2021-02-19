@@ -7,29 +7,7 @@
 			"inputs": [
 				{"name":"_accessControllerAddress","type":"address"},
 				{"name":"_myPublicKey","type":"uint256"},
-				{"name":"_myInitState","type":"cell"},
-				{"name":"_bridgeAddress","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "bridgeSetHandler",
-			"inputs": [
-				{"name":"messageType","type":"uint256"},
-				{"name":"handlerAddress","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "voteThroughBridge",
-			"inputs": [
-				{"name":"choice","type":"uint8"},
-				{"name":"chainId","type":"uint8"},
-				{"name":"messageType","type":"uint256"},
-				{"name":"nonce","type":"uint64"},
-				{"name":"data","type":"cell"}
+				{"name":"_myInitState","type":"cell"}
 			],
 			"outputs": [
 			]

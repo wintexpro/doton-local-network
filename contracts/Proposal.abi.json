@@ -5,13 +5,8 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"_ballotInitState","type":"cell"},
 				{"name":"_publicKey","type":"uint256"},
 				{"name":"_votersAmount","type":"uint256"},
-				{"name":"_proposalData","type":"uint256"},
-				{"name":"_chainId","type":"uint8"},
-				{"name":"_nonce","type":"uint64"},
-				{"name":"_voteControllerAddress","type":"address"},
 				{"name":"initializerChoice","type":"uint8"},
 				{"name":"initializerAddress","type":"address"},
 				{"name":"handlerAddress","type":"address"},
@@ -37,24 +32,6 @@
 			]
 		},
 		{
-			"name": "getProposalInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"value0","type":"uint256"},
-				{"name":"value1","type":"uint256"}
-			]
-		},
-		{
-			"name": "vote",
-			"inputs": [
-				{"name":"choice","type":"uint8"},
-				{"name":"ballotPublicKey","type":"uint256"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "voteByController",
 			"inputs": [
 				{"name":"voter","type":"address"},
@@ -67,6 +44,10 @@
 		}
 	],
 	"data": [
+		{"key":1,"name":"chainId","type":"uint8"},
+		{"key":2,"name":"nonce","type":"uint64"},
+		{"key":3,"name":"voteControllerAddress","type":"address"},
+		{"key":4,"name":"data","type":"cell"}
 	],
 	"events": [
 	]

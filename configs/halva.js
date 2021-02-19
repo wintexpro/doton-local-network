@@ -10,8 +10,8 @@ module.exports = {
   polkadotjs: {
     types: {
       "Message": "Text",
-      "ExtAddress": "Text",
       "chainbridge::ChainId": "u8",
+      "ExtAddress": "Text",
       "ChainId": "u8",
       "ResourceId": "[u8; 32]",
       "Nonce": "u64",
@@ -21,6 +21,11 @@ module.exports = {
         "votes_against": "Vec<AccountId>",
         "status": "enum"
       },
+      "Erc721Token": {
+        "id": "TokenId",
+        "metadata": "Vec<u8>"
+      },
+      "TokenId": "U256",
       "Address": "AccountId",
       "LookupSource": "AccountId"
     }

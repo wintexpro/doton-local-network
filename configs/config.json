@@ -5,10 +5,10 @@
       "type": "ton",
       "id": "2",
       "endpoint": "http://doton-ton-chain",
-      "from": "0:df22eba0b48020b70efa7a6e9d6360ed1dc20877250947470cc1289b14c9cc1e",
+      "from": "0:e8bc02f9e8e56c04d9248743cfed5b8c3a0d6b5171f7fcf083a0dd206f847891",
       "opts": {
         "contractsPath": "/contracts",
-        "receiver": "0:e50f4328179ef68fc4c45032adc97b714f668e4152a7b6805a391dca5cf492ee",
+        "receiver": "0:21235dbf90a09dc61d5389545530613c1fa02f9cc7cf596988cf4a215f8e9220",
         "startBlock": "3",
         "workchainID": "0"
       }

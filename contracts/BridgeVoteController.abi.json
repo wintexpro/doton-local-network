@@ -5,10 +5,10 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"_proposalStateInit","type":"cell"},
-				{"name":"_ballotInitState","type":"cell"},
+				{"name":"_proposalCode","type":"cell"},
 				{"name":"_deployInitialValue","type":"uint128"},
 				{"name":"_publicKey","type":"uint256"},
+				{"name":"_proposalPublicKey","type":"uint256"},
 				{"name":"_proposalVotersAmount","type":"uint256"},
 				{"name":"_bridgeAddress","type":"address"}
 			],
@@ -24,8 +24,7 @@
 				{"name":"messageType","type":"uint256"},
 				{"name":"handlerAddress","type":"address"},
 				{"name":"nonce","type":"uint64"},
-				{"name":"data","type":"uint256"},
-				{"name":"proposalPublicKey","type":"uint256"}
+				{"name":"data","type":"cell"}
 			],
 			"outputs": [
 			]
@@ -35,10 +34,9 @@
 			"inputs": [
 				{"name":"chainId","type":"uint8"},
 				{"name":"nonce","type":"uint64"},
-				{"name":"data","type":"uint256"},
+				{"name":"data","type":"cell"},
 				{"name":"initializerChoice","type":"uint8"},
 				{"name":"initializerAddress","type":"address"},
-				{"name":"proposalPublicKey","type":"uint256"},
 				{"name":"handlerAddress","type":"address"},
 				{"name":"messageType","type":"uint256"}
 			],
@@ -64,18 +62,11 @@
 			]
 		},
 		{
-			"name": "getBallotCode",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"ballotCode","type":"cell"}
-			]
-		},
-		{
 			"name": "getProposalAddress",
 			"inputs": [
 				{"name":"chainId","type":"uint8"},
-				{"name":"nonce","type":"uint64"}
+				{"name":"nonce","type":"uint64"},
+				{"name":"data","type":"cell"}
 			],
 			"outputs": [
 				{"name":"proposal","type":"address"}
