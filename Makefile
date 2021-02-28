@@ -15,8 +15,10 @@ BLOCK_TIME=7
 GIVER_ADDRESS=0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94
 PUBLIC_KEY=0xebc77aae202a4f12237e10892f4fe0e44f8fb3dfc07008dcc12b37f8f70c1149
 KEY=0:e8bc02f9e8e56c04d9248743cfed5b8c3a0d6b5171f7fcf083a0dd206f847891
+KEYSTORE_PASSWORD=123456
 
 define ENV
+	KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD)
 	CONFIGS_PATH=$(CONFIGS_PATH)
 	KEYS_PATH=$(KEYS_PATH)
 	CONTRACTS_PATH=$(CONTRACTS_PATH)
@@ -45,7 +47,7 @@ run-bridge:
 		-v $(ROOT_DIR)/contracts:/contracts \
 		-v $(ROOT_DIR)/configs:/configs \
 		-v $(ROOT_DIR)/keys:/keys \
-		-e KEYSTORE_PASSWORD=123456 \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
 		wintex/doton-bridge \
 		--config /configs/config.json
 
@@ -76,5 +78,28 @@ run-setup:
 		-v $(ROOT_DIR)/configs:/configs \
 		-v $(ROOT_DIR)/keys:/keys \
 		wintex/doton-setup \
-		--file /scripts/Makefile init $(ENV) \
+		--file /scripts/Makefile sub-setup $(ENV) \
+	) /bin/bash;
+
+.PHONY: run-setup-bridge
+run-setup-bridge:
+	docker exec -it $(shell docker run -d \
+		--name doton-setup-bridge \
+		--network doton-local-network_default \
+		--link doton-sub-chain \
+		--link doton-ton-chain \
+		-v $(ROOT_DIR)/contracts:/contracts\
+		-v $(ROOT_DIR)/scripts:/scripts\
+		-v $(ROOT_DIR)/configs:/configs\
+		-v $(ROOT_DIR)/keys:/keys \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		--entrypoint /bin/bash \
+		wintex/doton-bridge \
+		-c "\
+		./bridge --config /configs/config.json contracts sendGrams; \
+		sleep 3; \
+		./bridge --config /configs/config.json contracts deploy; \
+		sleep 3; \
+		./bridge --config /configs/config.json contracts setup; \
+		" \
 	) /bin/bash;
