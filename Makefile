@@ -105,3 +105,19 @@ run-setup-bridge:
 		./bridge --config /configs/config.json contracts deploy-wallet; \
 		" \
 	) /bin/bash;
+
+.PHONY: get-balance
+get-balance:
+	docker run -d \
+		--network doton-local-network_default \
+		--link doton-sub-chain \
+		--link doton-ton-chain \
+		-v $(ROOT_DIR)/contracts:/contracts\
+		-v $(ROOT_DIR)/scripts:/scripts\
+		-v $(ROOT_DIR)/configs:/configs\
+		-v $(ROOT_DIR)/keys:/keys \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		--entrypoint /bin/bash \
+		wintex/doton-bridge \
+		-c "\
+		./bridge --config /configs/config.json contracts get-balance; \
