@@ -51,4 +51,3 @@ BLOCK_TIME=
 .PHONY: sub-setup
 sub-setup:
 	halva-cli exec -f $(SCRIPTS_PATH)/setup.js -p $(CONFIGS_PATH)/halva.js
-

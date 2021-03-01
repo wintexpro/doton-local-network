@@ -55,15 +55,15 @@ run-bridge:
 build-setup:
 	docker build . -t wintex/doton-setup
 
-.PHONY: ton-send-msg
-ton-send-msg:
-	@echo $(shell docker exec -it $(SETUP_CONTAINER) \
-		make -f $(SCRIPTS_PATH)/Makefile ton-send-msg MSG="$(MSG)" $(ENV) | \
-		grep -o "MessageId: \([0-9a-zA-Z:]*\)")
+# .PHONY: ton-send-msg
+# ton-send-msg:
+# 	@echo $(shell docker exec -it $(SETUP_CONTAINER) \
+# 		make -f $(SCRIPTS_PATH)/Makefile ton-send-msg MSG="$(MSG)" $(ENV) | \
+# 		grep -o "MessageId: \([0-9a-zA-Z:]*\)")
 
-.PHONY: sub-send-msg
-sub-send-msg:
-	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
+# .PHONY: sub-send-msg
+# sub-send-msg:
+# 	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
 
 .PHONY: run-setup
 run-setup:
@@ -101,5 +101,7 @@ run-setup-bridge:
 		./bridge --config /configs/config.json contracts deploy; \
 		sleep 3; \
 		./bridge --config /configs/config.json contracts setup; \
+		sleep 3; \
+		./bridge --config /configs/config.json contracts deploy-wallet; \
 		" \
 	) /bin/bash;
