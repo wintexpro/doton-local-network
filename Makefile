@@ -121,3 +121,4 @@ get-balance:
 		wintex/doton-bridge \
 		-c "\
 		./bridge --config /configs/config.json contracts get-balance; \
+		"\
