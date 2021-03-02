@@ -1,5 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
+BRIDGE_IMAGE=wintex/doton-bridge:v0.1.0
 
 CONFIGS_PATH=/configs
 KEYS_PATH=/keys
@@ -48,7 +49,7 @@ run-bridge:
 		-v $(ROOT_DIR)/configs:/configs \
 		-v $(ROOT_DIR)/keys:/keys \
 		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
-		wintex/doton-bridge \
+		$(BRIDGE_IMAGE) \
 		--config /configs/config.json
 
 .PHONY: build-setup
@@ -94,9 +95,9 @@ run-setup-bridge:
 		-v $(ROOT_DIR)/keys:/keys \
 		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
 		--entrypoint /bin/bash \
-		wintex/doton-bridge \
+		$(BRIDGE_IMAGE) \
 		-c "\
-		./bridge --config /configs/config.json contracts sendGrams; \
+		./bridge --config /configs/config.json contracts send-grams; \
 		sleep 3; \
 		./bridge --config /configs/config.json contracts deploy; \
 		sleep 3; \
@@ -118,7 +119,7 @@ get-balance:
 		-v $(ROOT_DIR)/keys:/keys \
 		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
 		--entrypoint /bin/bash \
-		wintex/doton-bridge \
+		$(BRIDGE_IMAGE) \
 		-c "\
 		./bridge --config /configs/config.json contracts get-balance; \
 		"\
