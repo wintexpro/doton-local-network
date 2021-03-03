@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
-BRIDGE_IMAGE=wintex/doton-bridge:v0.1.0
+BRIDGE_IMAGE=wintex/doton-bridge
 
 CONFIGS_PATH=/configs
 KEYS_PATH=/keys
