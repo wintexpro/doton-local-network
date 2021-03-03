@@ -1,5 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
+BRIDGE_CONTAINER=$(shell docker ps -q -f name=doton-bridge)
 BRIDGE_IMAGE=wintex/doton-bridge
 
 CONFIGS_PATH=/configs
@@ -62,29 +63,39 @@ build-setup:
 # 		make -f $(SCRIPTS_PATH)/Makefile ton-send-msg MSG="$(MSG)" $(ENV) | \
 # 		grep -o "MessageId: \([0-9a-zA-Z:]*\)")
 
-# .PHONY: sub-send-msg
-# sub-send-msg:
-# 	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
+.PHONY: sub-send-msg
+sub-send-msg:
+	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
 
 .PHONY: run-setup
 run-setup:
-	docker exec -it $(shell docker run -d \
+	$(MAKE) run-setup-substrate && \
+	$(MAKE) run-setup-ton
+
+.PHONY: run-setup-substrate
+run-setup-substrate:
+	docker run -d \
 		--name doton-setup \
 		--network doton-local-network_default \
 		--entrypoint make \
 		--link doton-sub-chain \
 		--link doton-ton-chain \
+		--entrypoint halva-cli \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		-e CONFIGS_PATH=$(CONFIGS_PATH) \
+		-e KEYS_PATH=$(KEYS_PATH) \
+		-e CONTRACTS_PATH=$(CONTRACTS_PATH) \
+		-e SCRIPTS_PATH=$(SCRIPTS_PATH) \
 		-v $(ROOT_DIR)/scripts:/scripts \
 		-v $(ROOT_DIR)/contracts:/contracts \
 		-v $(ROOT_DIR)/configs:/configs \
 		-v $(ROOT_DIR)/keys:/keys \
 		wintex/doton-setup \
-		--file /scripts/Makefile sub-setup $(ENV) \
-	) /bin/bash;
+		exec -f $(SCRIPTS_PATH)/setup.js -p $(CONFIGS_PATH)/halva.js \
 
-.PHONY: run-setup-bridge
-run-setup-bridge:
-	docker exec -it $(shell docker run -d \
+.PHONY: run-setup-ton
+run-setup-ton:
+	docker run -d \
 		--name doton-setup-bridge \
 		--network doton-local-network_default \
 		--link doton-sub-chain \
@@ -94,32 +105,28 @@ run-setup-bridge:
 		-v $(ROOT_DIR)/configs:/configs\
 		-v $(ROOT_DIR)/keys:/keys \
 		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		-e CONFIGS_PATH=$(CONFIGS_PATH) \
+		-e KEYS_PATH=$(KEYS_PATH) \
+		-e CONTRACTS_PATH=$(CONTRACTS_PATH) \
+		-e SCRIPTS_PATH=$(SCRIPTS_PATH) \
 		--entrypoint /bin/bash \
 		$(BRIDGE_IMAGE) \
 		-c "\
 		./bridge --config /configs/config.json contracts send-grams; \
-		sleep 3; \
+		sleep 6; \
 		./bridge --config /configs/config.json contracts deploy; \
-		sleep 3; \
+		sleep 6; \
 		./bridge --config /configs/config.json contracts setup; \
-		sleep 3; \
+		sleep 6; \
 		./bridge --config /configs/config.json contracts deploy-wallet; \
 		" \
-	) /bin/bash;
+
+EXEC_ON_BRIDGE=docker exec -e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) -it $(BRIDGE_CONTAINER) /bridge --config $(CONFIGS_PATH)/config.json
 
 .PHONY: get-balance
 get-balance:
-	docker run -d \
-		--network doton-local-network_default \
-		--link doton-sub-chain \
-		--link doton-ton-chain \
-		-v $(ROOT_DIR)/contracts:/contracts\
-		-v $(ROOT_DIR)/scripts:/scripts\
-		-v $(ROOT_DIR)/configs:/configs\
-		-v $(ROOT_DIR)/keys:/keys \
-		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
-		--entrypoint /bin/bash \
-		$(BRIDGE_IMAGE) \
-		-c "\
-		./bridge --config /configs/config.json contracts get-balance; \
-		"\
+	$(EXEC_ON_BRIDGE) contracts get-balance
+
+.PHONY: ton-send-tokens
+ton-send-tokens:
+	$(EXEC_ON_BRIDGE) contracts send-tokens --amount $(AMOUNT) --to $(TO) --nonce $(NONCE)
