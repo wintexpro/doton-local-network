@@ -113,11 +113,11 @@ run-setup-ton:
 		$(BRIDGE_IMAGE) \
 		-c "\
 		./bridge --config /configs/config.json contracts send-grams; \
-		sleep 6; \
+		sleep 10; \
 		./bridge --config /configs/config.json contracts deploy; \
-		sleep 6; \
+		sleep 10; \
 		./bridge --config /configs/config.json contracts setup; \
-		sleep 6; \
+		sleep 10; \
 		./bridge --config /configs/config.json contracts deploy-wallet; \
 		" \
 
