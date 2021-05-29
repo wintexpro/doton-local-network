@@ -25,6 +25,7 @@
 		{
 			"name": "relayerVoteForProposal",
 			"inputs": [
+				{"name":"epochNumber","type":"uint64"},
 				{"name":"choice","type":"uint8"},
 				{"name":"chainId","type":"uint8"},
 				{"name":"messageType","type":"uint256"},

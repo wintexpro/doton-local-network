@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
-BRIDGE_IMAGE=wintex/doton-bridge:v0.1.0
+BRIDGE_IMAGE=wintex/doton-bridge:latest
 
 CONFIGS_PATH=/configs
 KEYS_PATH=/keys
@@ -33,9 +33,22 @@ define ENV
 	KEY=$(KEY)
 endef
 
+.PHONY: kill-all
+kill-all:
+	$(MAKE) kill-chains && \
+	$(MAKE) kill-bridge && \
+	$(MAKE) kill-setup
+
 .PHONY: run-chains
 run-chains:
 	docker-compose up -d
+
+.PHONY: kill-chains
+kill-chains:
+	docker container stop doton-ton-chain && \
+	docker container rm doton-ton-chain && \
+	docker container stop doton-sub-chain && \
+	docker container rm doton-sub-chain
 
 .PHONY: run-bridge
 run-bridge:
@@ -52,23 +65,19 @@ run-bridge:
 		$(BRIDGE_IMAGE) \
 		--config /configs/config.json
 
+.PHONY: kill-bridge
+kill-bridge:
+	docker container stop doton-bridge && \
+	docker container rm doton-bridge
+
 .PHONY: build-setup
 build-setup:
 	docker build . -t wintex/doton-setup
 
-# .PHONY: ton-send-msg
-# ton-send-msg:
-# 	@echo $(shell docker exec -it $(SETUP_CONTAINER) \
-# 		make -f $(SCRIPTS_PATH)/Makefile ton-send-msg MSG="$(MSG)" $(ENV) | \
-# 		grep -o "MessageId: \([0-9a-zA-Z:]*\)")
-
-# .PHONY: sub-send-msg
-# sub-send-msg:
-# 	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
-
 .PHONY: run-setup
 run-setup:
 	docker exec -it $(shell docker run -d \
+		--rm \
 		--name doton-setup \
 		--network doton-local-network_default \
 		--entrypoint make \
@@ -85,6 +94,7 @@ run-setup:
 .PHONY: run-setup-bridge
 run-setup-bridge:
 	docker exec -it $(shell docker run -d \
+		--rm \
 		--name doton-setup-bridge \
 		--network doton-local-network_default \
 		--link doton-sub-chain \
@@ -107,9 +117,14 @@ run-setup-bridge:
 		" \
 	) /bin/bash;
 
+.PHONY: kill-setup
+kill-setup:
+	docker container stop doton-setup-bridge && \
+	docker container rm doton-setup-bridge
+
 .PHONY: get-balance
 get-balance:
-	docker run -d \
+	docker run --rm \
 		--network doton-local-network_default \
 		--link doton-sub-chain \
 		--link doton-ton-chain \

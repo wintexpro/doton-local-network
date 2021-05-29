@@ -4,12 +4,12 @@
 version: '3'
 services:
   ton-chain:
-    image: tonlabs/local-node:0.24.11
+    image: tonlabs/local-node:latest
     container_name: doton-ton-chain
     environment:
       - USER_AGREEMENT=yes
     networks:
-      - default
+      - doton-local-network_default
     ports:
       - "80:80"
 
@@ -18,7 +18,11 @@ services:
     container_name: doton-sub-chain
     command: doton-substrate-chain --dev --ws-external --rpc-external --prometheus-external
     networks:
-      - default
+      - doton-local-network_default
     ports:
       - "9944:9944"
       - "9615:9615"
+
+networks:
+  doton-local-network_default:
+    external: true

@@ -5,11 +5,12 @@
       "type": "ton",
       "id": "2",
       "endpoint": "http://doton-ton-chain",
-      "from": "0:2089148264fb4b40dbb9ed7ba7a862403a715abf50a5730637da33d4b6453dd2",
+      "from": "0:b8d83bb3d617ba74e0ea44542a510ef43b5709eee93e2c8f2e6254bc5e59237f",
       "opts": {
         "contractsPath": "./contracts",
-        "receiver": "0:1ba93200aa73341512bb7d406ccc3bae38b79628ef3fdcccd9ce2e0a133b1387",
-        "burnedTokensHandler": "0:f5150024d6737c23f8a5057b391e9b39a93bc48fa047108d7613b53b6401141f",
+				"receiver": "0:f7fdc0170f9c7e0184962aea78b1f208fe857681537854104684d62479e76e5d",
+				"burnedTokensHandler": "0:dd510027840f11ce3b7b5ef0d177ccdad55f7f0fb104d8591c8c6f69babc9cc8",
+				"epochVoteController": "0:35895ba7f51c612cda5f9ae7ab96a51e29eb6ad2de4c948568b8c04409912f57",
         "startBlock": "3",
         "workchainID": "0"
       }

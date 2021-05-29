@@ -6,8 +6,7 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"_proposalCode","type":"cell"},
-				{"name":"_bridgeVoteControllerAddress","type":"address"},
-				{"name":"_bridgeVoteControllerPubKey","type":"uint256"},
+				{"name":"_epochControllerPubKey","type":"uint256"},
 				{"name":"_tip3RootAddress","type":"address"}
 			],
 			"outputs": [
@@ -16,7 +15,7 @@
 		{
 			"name": "executeProposal",
 			"inputs": [
-				{"name":"proposalPubKey","type":"uint256"},
+				{"name":"epochAddress","type":"address"},
 				{"name":"chainId","type":"uint8"},
 				{"name":"nonce","type":"uint64"},
 				{"name":"messageType","type":"uint256"},

@@ -8,7 +8,6 @@
 				{"name":"_proposalCode","type":"cell"},
 				{"name":"_deployInitialValue","type":"uint128"},
 				{"name":"_publicKey","type":"uint256"},
-				{"name":"_proposalPublicKey","type":"uint256"},
 				{"name":"_proposalVotersAmount","type":"uint256"}
 			],
 			"outputs": [

@@ -5,7 +5,6 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"_publicKey","type":"uint256"},
 				{"name":"_votersAmount","type":"uint256"},
 				{"name":"initializerChoice","type":"uint8"},
 				{"name":"initializerAddress","type":"address"},

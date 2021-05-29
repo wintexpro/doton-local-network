@@ -25,11 +25,34 @@
 		{
 			"name": "voteThroughBridge",
 			"inputs": [
+				{"name":"epochNumber","type":"uint64"},
 				{"name":"choice","type":"uint8"},
 				{"name":"chainId","type":"uint8"},
 				{"name":"messageType","type":"uint256"},
 				{"name":"nonce","type":"uint64"},
 				{"name":"data","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "signUpForEpoch",
+			"inputs": [
+				{"name":"epochAddress","type":"address"},
+				{"name":"signHighPart","type":"uint256"},
+				{"name":"signLowPart","type":"uint256"},
+				{"name":"pubkey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "forceEra",
+			"inputs": [
+				{"name":"epochAddress","type":"address"},
+				{"name":"signHighPart","type":"uint256"},
+				{"name":"signLowPart","type":"uint256"},
+				{"name":"pubkey","type":"uint256"}
 			],
 			"outputs": [
 			]

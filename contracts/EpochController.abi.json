@@ -1,0 +1,89 @@
+{
+	"ABI version": 2,
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_epochCode","type":"cell"},
+				{"name":"_proposalCode","type":"cell"},
+				{"name":"_deployInitialValue","type":"uint128"},
+				{"name":"_publicKey","type":"uint256"},
+				{"name":"_proposalVotersAmount","type":"uint256"},
+				{"name":"_bridgeAddress","type":"address"},
+				{"name":"_firstEraDuration","type":"uint32"},
+				{"name":"_secondEraDuration","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getEpochAddress",
+			"inputs": [
+				{"name":"number","type":"uint64"}
+			],
+			"outputs": [
+				{"name":"epoch","type":"address"}
+			]
+		},
+		{
+			"name": "voteByBridge",
+			"inputs": [
+				{"name":"epochNumber","type":"uint64"},
+				{"name":"voter","type":"address"},
+				{"name":"choice","type":"uint8"},
+				{"name":"chainId","type":"uint8"},
+				{"name":"messageType","type":"uint256"},
+				{"name":"handlerAddress","type":"address"},
+				{"name":"nonce","type":"uint64"},
+				{"name":"data","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "newEpoch",
+			"inputs": [
+				{"name":"newPublicrandomness","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "firstEraDuration",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"firstEraDuration","type":"uint32"}
+			]
+		},
+		{
+			"name": "secondEraDuration",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"secondEraDuration","type":"uint32"}
+			]
+		},
+		{
+			"name": "publicRandomness",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"publicRandomness","type":"uint256"}
+			]
+		},
+		{
+			"name": "currentEpochNumber",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"currentEpochNumber","type":"uint64"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}
