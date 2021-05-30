@@ -31,7 +31,23 @@ That execute to send initial value to contracts and deploy them to local TON nod
 At last, you can run the relay node by running the command (please, make sure the setup scripts were done):
 
 ```sh
-$ make run-bridge
+$ make run-alice
+```
+
+After making sure alice node is running, you must deploy another 2 relayers
+
+At last, you can run
+
+```sh
+$ CONFIG_NAME=config2.json make deploy-relayer
+$ CONFIG_NAME=config3.json make deploy-relayer
+```
+
+And run they
+
+```sh
+$ make run-bob
+$ make run-charlie
 ```
 
 ## Polkadot JS Apps
