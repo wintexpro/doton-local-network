@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SETUP_CONTAINER=$(shell docker ps -q -f name=doton-setup)
-BRIDGE_CONTAINER=$(shell docker ps -q -f name=doton-bridge)
+BRIDGE_CONTAINER=$(shell docker ps -q -f name=doton-relayer-alice)
 BRIDGE_IMAGE=wintex/doton-bridge
 
 CONFIGS_PATH=/configs
@@ -37,8 +37,14 @@ endef
 .PHONY: kill-all
 kill-all:
 	$(MAKE) kill-chains && \
-	$(MAKE) kill-bridge && \
+	$(MAKE) kill-relayers && \
 	$(MAKE) kill-setup
+
+.PHONY: kill-relayers
+kill-relayers:
+	$(MAKE) kill-alice && \
+	$(MAKE) kill-bob && \
+	$(MAKE) kill-charlie
 
 .PHONY: run-chains
 run-chains:
@@ -51,10 +57,16 @@ kill-chains:
 	docker container stop doton-sub-chain && \
 	docker container rm doton-sub-chain
 
-.PHONY: run-bridge
-run-bridge:
+.PHONY: run-relayers
+run-relayers:
+	$(MAKE) run-alice && \
+	$(MAKE) run-bob && \
+	$(MAKE) run-charlie
+
+.PHONY: run-alice
+run-alice:
 	docker run -d \
-		--name doton-bridge \
+		--name doton-relayer-alice \
 		--network doton-local-network_default \
 		--link doton-sub-chain \
 		--link doton-ton-chain \
@@ -66,23 +78,73 @@ run-bridge:
 		$(BRIDGE_IMAGE) \
 		--config /configs/config.json
 
-.PHONY: kill-bridge
-kill-bridge:
-	docker container stop doton-bridge && \
-	docker container rm doton-bridge
+.PHONY: run-bob
+run-bob:
+	docker run -d \
+		--name doton-relayer-bob \
+		--network doton-local-network_default \
+		--link doton-sub-chain \
+		--link doton-ton-chain \
+		-v $(ROOT_DIR)/scripts:/scripts \
+		-v $(ROOT_DIR)/contracts:/contracts \
+		-v $(ROOT_DIR)/configs:/configs \
+		-v $(ROOT_DIR)/keys:/keys \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		$(BRIDGE_IMAGE) \
+		--config /configs/config2.json
+
+.PHONY: run-charlie
+run-charlie:
+	docker run -d \
+		--name doton-relayer-charlie \
+		--network doton-local-network_default \
+		--link doton-sub-chain \
+		--link doton-ton-chain \
+		-v $(ROOT_DIR)/scripts:/scripts \
+		-v $(ROOT_DIR)/contracts:/contracts \
+		-v $(ROOT_DIR)/configs:/configs \
+		-v $(ROOT_DIR)/keys:/keys \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		$(BRIDGE_IMAGE) \
+		--config /configs/config3.json
+
+.PHONY: kill-alice
+kill-alice:
+	docker container stop doton-relayer-alice && \
+	docker container rm doton-relayer-alice
+
+.PHONY: kill-bob
+kill-bob:
+	docker container stop doton-relayer-bob && \
+	docker container rm doton-relayer-bob
+
+.PHONY: kill-charlie
+kill-charlie:
+	docker container stop doton-relayer-charlie && \
+	docker container rm doton-relayer-charlie
 
 .PHONY: build-setup
 build-setup:
 	docker build . -t wintex/doton-setup
 
-.PHONY: sub-send-msg
-sub-send-msg:
-	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
-
 .PHONY: run-setup
 run-setup:
 	$(MAKE) run-setup-substrate && \
 	$(MAKE) run-setup-ton
+
+.PHONY: sub-send-msg
+sub-send-msg:
+	docker exec --env MSG="0x$(shell echo $(MSG) | xxd -p)" -it $(SETUP_CONTAINER) halva-cli exec -p $(CONFIGS_PATH)/halva.js -f $(SCRIPTS_PATH)/helpers.js
+
+.PHONY: deploy-relayer
+deploy-relayer:
+	docker exec \
+		-e KEYSTORE_PASSWORD=$(KEYSTORE_PASSWORD) \
+		-it $(BRIDGE_CONTAINER) /bridge \
+		--config $(CONFIGS_PATH)/$(CONFIG_NAME) \
+		contracts deploy-relayer \
+		--accessControllerAddress 0:86429102eff726f48ae807b229e29f5d56565c6e793c471dcf4c148e50b12d05 \
+		--bridgeAddress 0:1ec11b150a684e23562a6d0f74adbd3e35f942573e82f99265a1a56699c89ed4 \
 
 .PHONY: run-setup-substrate
 run-setup-substrate:
