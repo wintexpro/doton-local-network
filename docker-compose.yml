@@ -20,5 +20,6 @@ services:
     networks:
       - default
     ports:
+      - "9933:9933"
       - "9944:9944"
       - "9615:9615"

@@ -2,6 +2,10 @@
 
 (async function () {
   await execTx(halva.polkadot.tx.chainBridge.addRelayer(alicePair.address))
+  await execTx(halva.polkadot.tx.chainBridge.addRelayer(bobPair.address))
+  await execTx(halva.polkadot.tx.chainBridge.addRelayer(charliePair.address))
+
+  await execTx(halva.polkadot.tx.chainBridge.setThreshold(2))
 
   await execTx(halva.polkadot.tx.chainBridge.setResource(
     "0x000000000000000000000053696d706c654d6573736167655265736f75726365",

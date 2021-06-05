@@ -19,7 +19,7 @@
       "type": "substrate",
       "id": "1",
       "endpoint": "ws://doton-sub-chain:9944",
-      "from": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+      "from": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
       "opts": {
         "useExtendedCall": "true",
         "startBlock": "1"
